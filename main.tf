@@ -3,10 +3,10 @@ provider "aws" {
 }
 
 resource "aws_dynamodb_table" "products" {
-  name = "products"
+  name         = "products"
   billing_mode = "PROVISIONED"
 
-  read_capacity = 5
+  read_capacity  = 5
   write_capacity = 5
 
   hash_key = "id"
@@ -20,11 +20,11 @@ resource "aws_dynamodb_table" "products" {
   }
 
   global_secondary_index {
-    name = "category-index"
-    hash_key = "category"
+    name            = "category-index"
+    hash_key        = "category"
     projection_type = "ALL"
-    read_capacity = 5
-    write_capacity = 5
+    read_capacity   = 5
+    write_capacity  = 5
   }
 
   tags = {
@@ -34,10 +34,10 @@ resource "aws_dynamodb_table" "products" {
 }
 
 resource "aws_dynamodb_table" "orders" {
-  name = "orders"
+  name         = "orders"
   billing_mode = "PROVISIONED"
 
-  read_capacity = 5
+  read_capacity  = 5
   write_capacity = 5
 
   hash_key = "id"
@@ -51,11 +51,11 @@ resource "aws_dynamodb_table" "orders" {
   }
 
   global_secondary_index {
-    name = "customerId-index"
-    hash_key = "customerId"
+    name            = "customerId-index"
+    hash_key        = "customerId"
     projection_type = "ALL"
-    read_capacity = 5
-    write_capacity = 5
+    read_capacity   = 5
+    write_capacity  = 5
   }
 
   tags = {
@@ -65,10 +65,10 @@ resource "aws_dynamodb_table" "orders" {
 }
 
 resource "aws_dynamodb_table" "customers" {
-  name = "customers"
+  name         = "customers"
   billing_mode = "PROVISIONED"
 
-  read_capacity = 5
+  read_capacity  = 5
   write_capacity = 5
 
   hash_key = "id"
@@ -84,10 +84,10 @@ resource "aws_dynamodb_table" "customers" {
 }
 
 resource "aws_dynamodb_table" "counters" {
-  name = "counters"
+  name         = "counters"
   billing_mode = "PROVISIONED"
 
-  read_capacity = 5
+  read_capacity  = 5
   write_capacity = 5
 
   hash_key = "name"

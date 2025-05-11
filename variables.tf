@@ -9,3 +9,8 @@ variable "environment" {
   type        = string
   default     = "Production"
 }
+
+variable "aws_account_id" {
+  description = "ID da conta AWS onde está a role LabRole"
+  type        = string
+}

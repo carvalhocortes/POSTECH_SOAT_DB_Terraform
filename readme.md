@@ -52,55 +52,51 @@ Abaixo está um diagrama UML atualizado com foco na modelagem para o **DynamoDB*
 ```mermaid
 classDiagram
     class Counter {
-        +string pk = COUNTER#{name}
-        +string sk = METADATA
+        +ObjectId _id
+        +string name
         +number seq
     }
 
     class Customer {
-        +string pk = CUSTOMER#{cpf}
-        +string sk = METADATA
+        +ObjectId _id
+        +string cpf
         +string name
         +string email
-        +string createdAt
-        +string updatedAt
+        +Date createdAt
+        +Date updatedAt
     }
 
     class Product {
-        +string pk = PRODUCT#{productId}
-        +string sk = METADATA
+        +ObjectId _id
         +string name
         +string category
         +number price
         +string description
         +string[] images
-        +string createdAt
-        +string updatedAt
+        +Date createdAt
+        +Date updatedAt
     }
 
     class Order {
-        +string pk = ORDER#{orderId}
-        +string sk = METADATA
-        +string customerCpf
+        +ObjectId _id
+        +ObjectId customerId
         +ProductItem[] products
         +number orderNumber
         +number total
         +string status
         +string paymentStatus
         +string paymentId
-        +string createdAt
-        +string updatedAt
+        +Date createdAt
+        +Date updatedAt
     }
 
     class ProductItem {
-        +string productId
+        +ObjectId id
         +number quantity
     }
 
-    %% Relações conceituais (não nativas do DynamoDB, mas modeladas via PK/SK)
+    %% Relações
     Customer "1" --> "many" Order : has
     Order "many" --> "1" ProductItem : contains
     ProductItem --> Product : references
-
-
     ```

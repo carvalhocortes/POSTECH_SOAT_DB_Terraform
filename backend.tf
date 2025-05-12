@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket  = "postech-soat-db-terraform-bucket"
-    key     = "s3-github-actions/terraform.tfstate"
+    bucket  = "postech-soat-bucket"
+    key     = "s3-github-actions/db/terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
   }

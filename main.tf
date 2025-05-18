@@ -45,18 +45,6 @@ resource "aws_dynamodb_table" "orders" {
     name = "id"
     type = "S"
   }
-  attribute {
-    name = "customerId"
-    type = "S"
-  }
-
-  global_secondary_index {
-    name            = "customerId-index"
-    hash_key        = "customerId"
-    projection_type = "ALL"
-    read_capacity   = 5
-    write_capacity  = 5
-  }
 
   tags = {
     "Environment" = var.environment
@@ -75,6 +63,18 @@ resource "aws_dynamodb_table" "customers" {
   attribute {
     name = "id"
     type = "S"
+  }
+  attribute {
+    name = "cpf"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name            = "cpf-index"
+    hash_key        = "cpf"
+    projection_type = "ALL"
+    read_capacity   = 5
+    write_capacity  = 5
   }
 
   tags = {

@@ -93,6 +93,6 @@ jobs:
             --table-name counters \
             --item '{
               "name": {"S": "orderNumber"},
-              "seq": {"N": "4"}
+              "seq": {"N": "0"}
             }' \
-            --region us-east-1
+            --region us-west-2

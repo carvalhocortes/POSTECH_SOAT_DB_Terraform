@@ -85,3 +85,14 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
+
+      - name: Add initial item to DynamoDB "counters"
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          aws dynamodb put-item \
+            --table-name counters \
+            --item '{
+              "name": {"S": "orderNumber"},
+              "seq": {"N": "4"}
+            }' \
+            --region us-east-1

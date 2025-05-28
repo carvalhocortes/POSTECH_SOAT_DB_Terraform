@@ -3,7 +3,7 @@ terraform {
     bucket = "postech-soat10-bucket"
     key    = "github-actions-fiap/db/terraform.tfstate"
 
-    region  = "us-east-1"
+    region  = "us-west-2"
     encrypt = true
   }
   required_version = ">=0.13.0"

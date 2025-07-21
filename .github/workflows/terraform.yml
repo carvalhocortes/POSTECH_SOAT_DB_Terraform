@@ -104,13 +104,6 @@ jobs:
             }' \
             --region us-west-2
 
-      - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        id: apply
-        env:
-          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
-        run: terraform apply -auto-approve -input=false
-
       - name: Run SQL Migration
         if: steps.apply.outcome == 'success'
         env:

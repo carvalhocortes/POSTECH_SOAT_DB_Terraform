@@ -17,3 +17,8 @@ output "counters_table_arn" {
   description = "ARN da tabela de Contadores"
   value       = aws_dynamodb_table.counters.arn
 }
+
+output "db_instance_endpoint" {
+  description = "O endpoint de conexão para a instância RDS."
+  value       = aws_db_instance.postgres_db.endpoint
+}

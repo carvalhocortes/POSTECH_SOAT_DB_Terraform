@@ -55,7 +55,7 @@ jobs:
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          PLAN: testerraformTest env:
+          PLAN: testerraformTest
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

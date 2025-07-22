@@ -107,7 +107,7 @@ jobs:
       - name: Run SQL Migration
         if: steps.apply.outcome == 'success'
         env:
-          PGHOST: ${{ steps.apply.outputs.db_instance_endpoint }}
+          PGHOST: ${{ steps.apply.outputs.db_instance_endpoint.split(':')[0] }}
           PGUSER: "terraformAdmin"
           PGPASSWORD: ${{ secrets.DB_PASSWORD }}
           PGDATABASE: "fiapdbPostgres"

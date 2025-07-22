@@ -118,7 +118,7 @@ jobs:
 
       - name: Update Pull Request Outputs
         uses: actions/github-script@v6
-        if: github.event_name == 'pull_request'
+        if: steps.apply.outcome == 'success'
         env:
           PLAN: testerraformTest
         with:

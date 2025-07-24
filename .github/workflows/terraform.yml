@@ -106,10 +106,14 @@ jobs:
             }' \
             --region us-west-2
 
+      - name: Extrair host do endpoint
+        id: extrair_host
+        run: echo "host=$(echo ${{ steps.apply.outputs.db_instance_endpoint }} | cut -d':' -f1)" >> $GITHUB_OUTPUT
+
       - name: Run SQL Migration
         if: steps.apply.outcome == 'success'
         env:
-          PGHOST: ${{ steps.apply.outputs.db_instance_endpoint.split(':')[0] }}
+          PGHOST: ${{ steps.extrair_host.outputs.host }}
           PGUSER: "terraformAdmin"
           PGPASSWORD: ${{ secrets.DB_PASSWORD }}
           PGDATABASE: "fiapdbPostgres"

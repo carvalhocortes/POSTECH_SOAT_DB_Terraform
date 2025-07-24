@@ -39,11 +39,15 @@ jobs:
 
       - name: Terraform Validate
         id: validate
+        env:
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform validate -no-color
 
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
+        env:
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
@@ -84,6 +88,9 @@ jobs:
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: apply
+        env:
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform apply -auto-approve -input=false
 
       - name: Add initial item to DynamoDB "counters"
@@ -96,3 +103,33 @@ jobs:
               "seq": {"N": "0"}
             }' \
             --region us-west-2
+
+      - name: Run SQL Migration
+        if: steps.apply.outcome == 'success'
+        env:
+          PGHOST: ${{ steps.apply.outputs.db_instance_endpoint.split(':')[0] }}
+          PGUSER: "terraformAdmin"
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+          PGDATABASE: "fiapdbPostgres"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          psql -f ./initiate-postgres.sql
+
+      - name: Update Pull Request Outputs
+        uses: actions/github-script@v6
+        if: steps.apply.outcome == 'success'
+        env:
+          PLAN: testerraformTest
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            #### Terraform outputs \`${{ steps.apply.outputs }}\`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })

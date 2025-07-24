@@ -57,7 +57,7 @@ jobs:
         uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          PLAN: testerraformTest env:
+          PLAN: Criando os recursos necessários para os banco de dados.
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |

@@ -94,7 +94,7 @@ jobs:
         run: terraform apply -auto-approve -input=false
 
       - name: Update Pull Request Outputs
-        uses: actions/github-script@v6
+        # uses: actions/github-script@v6
         if: steps.apply.outcome == 'success'
         # env:
         #   PLAN: Mostra outputs do Terraform após a aplicação bem-sucedida.

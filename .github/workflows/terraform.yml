@@ -93,6 +93,30 @@ jobs:
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform apply -auto-approve -input=false
 
+      - name: Update Pull Request Outputs
+        uses: actions/github-script@v6
+        if: steps.apply.outcome == 'success'
+        env:
+          PLAN: Mostra outputs do Terraform após a aplicação bem-sucedida.
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `
+            <details><summary>Show Output</summary>
+
+            \`\`\`terraform\n
+            ${{ steps.apply }}\
+            \`\`\`
+
+            </details>;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
       - name: Add initial item to DynamoDB "counters"
         if: steps.apply.outcome == 'success'
         run: |
@@ -103,24 +127,6 @@ jobs:
               "seq": {"N": "0"}
             }' \
             --region us-west-2
-
-      - name: Update Pull Request Outputs
-        uses: actions/github-script@v6
-        if: steps.apply.outcome == 'success'
-        env:
-          PLAN: testerraformTest
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `
-            #### Terraform outputs \`${{ steps.apply.outputs }}\`;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
 
       - name: Extrair host do endpoint
         id: extrair_host

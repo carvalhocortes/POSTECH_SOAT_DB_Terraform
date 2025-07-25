@@ -32,6 +32,8 @@ jobs:
       run: terraform init
 
     - name: 'Terraform Plan Destroy'
+      env:
+        TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
       run: terraform plan -destroy -out=tfplan-destroy
 
     - name: 'Terraform Apply Destroy'

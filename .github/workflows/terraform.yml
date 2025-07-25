@@ -93,32 +93,6 @@ jobs:
           TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform apply -auto-approve -input=false
 
-      - name: Update Pull Request Outputs
-        # uses: actions/github-script@v6
-        if: steps.apply.outcome == 'success'
-        # env:
-        #   PLAN: Mostra outputs do Terraform após a aplicação bem-sucedida.
-        run: |
-          echo "${{ steps.apply.outputs.stdout }}" | grep 'db_instance_endpoint' | awk '{print $3}'
-        # with:
-        #   github-token: ${{ secrets.GITHUB_TOKEN }}
-          # script: |
-            # const output = `
-            # <details><summary>Show Output</summary>
-
-            # \`\`\`terraform\n
-            # ${{ steps.apply }}\
-            # \`\`\`
-
-            # </details>;
-
-            # github.rest.issues.createComment({
-            #   issue_number: context.issue.number,
-            #   owner: context.repo.owner,
-            #   repo: context.repo.repo,
-            #   body: output
-            # })
-
       - name: Add initial item to DynamoDB "counters"
         if: steps.apply.outcome == 'success'
         run: |
@@ -131,14 +105,14 @@ jobs:
             --region us-west-2
 
       - name: Extrair host do endpoint
-        id: extrair_host
+        id: get_host
         if: steps.apply.outcome == 'success'
-        run: echo "host=$(echo ${{ steps.apply.outputs.db_instance_endpoint }} | cut -d':' -f1)" >> $GITHUB_OUTPUT
+        run: echo "host=$(echo "${{ steps.apply.outputs.stdout }}" | grep 'db_instance_endpoint' | awk '{print $3}'| cut -d':' -f1)" >> $GITHUB_OUTPUT
 
       - name: Run SQL Migration
         if: steps.apply.outcome == 'success'
         env:
-          PGHOST: ${{ steps.extrair_host.outputs.host }}
+          PGHOST: ${{ steps.get_host.outputs.host }}
           PGUSER: "terraformAdmin"
           PGPASSWORD: ${{ secrets.DB_PASSWORD }}
           PGDATABASE: "fiapdbPostgres"

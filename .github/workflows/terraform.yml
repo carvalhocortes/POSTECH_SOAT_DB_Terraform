@@ -98,8 +98,8 @@ jobs:
         if: steps.apply.outcome == 'success'
         # env:
         #   PLAN: Mostra outputs do Terraform após a aplicação bem-sucedida.
-        run: "echo ${{ steps.apply }}"
-        # with:
+        run: 'echo "${{ toJson(steps.apply) }}"'
+          # with:
         #   github-token: ${{ secrets.GITHUB_TOKEN }}
           # script: |
             # const output = `
